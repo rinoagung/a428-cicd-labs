@@ -13,10 +13,10 @@ node {
         stage('Deploy') {
             def ec2_ip = 'ec2-18-143-182-57.ap-southeast-1.compute.amazonaws.com'
             def ec2_user = 'ubuntu'
-            def ec2_path = '/mnt/d/docker/aws_/test-environtment.pem'
+            def ec2_path = 'D:/docker/aws_/test-environtment.pem'
 
             sh """
-                ls /mnt/d/docker/a428-cicd-labs-submission
+                dir D:/docker/a428-cicd-labs-submission
                 ssh -i ${ec2_path} -o StrictHostKeyChecking=no -t ${ec2_user}@${ec2_ip} << EOF
                 mkdir -p /home/ubuntu/my-app && cd /home/ubuntu/my-app
                 git clone https://github.com/rinoagung/a428-cicd-labs.git || (cd a428-cicd-labs && git pull)
