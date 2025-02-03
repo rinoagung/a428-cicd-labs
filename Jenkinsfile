@@ -13,7 +13,7 @@ node {
         stage('Deploy') {
             def ec2_ip = 'ec2-18-143-182-57.ap-southeast-1.compute.amazonaws.com'
             def ec2_user = 'ubuntu'
-            def ec2_path = './../_aws/test-environment.pem'
+            def ec2_path = './test-environment.pem'
 
             sh """
                 ls ./jenkins
