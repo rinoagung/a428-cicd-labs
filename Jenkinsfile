@@ -13,9 +13,9 @@ node(null) {
         stage('Deploy') {
             sshagent(credentials: ['ec2-ssh-agent-key']) {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@18.142.230.90 \
-                    'pwd' \
-                    'ls'
+                    ssh -o StrictHostKeyChecking=no ubuntu@18.142.230.90 "rm -rf /home/ec2-user/my-react-app/*" \
+                    scp -o StrictHostKeyChecking=no -r build/* ubuntu@18.142.230.90:/home/ec2-user/my-react-app \
+                    echo 'Deploy berhasil'
                 """
             }
         }
