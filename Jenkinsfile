@@ -18,7 +18,7 @@ node(null) {
         stage('Deploy') {
             sshagent(credentials: ['ec2-ssh-agent-key']) {
                 sh """
-                    scp -o StrictHostKeyChecking=no -r build ubuntu@18.142.230.90:/home/ubuntu/ \
+                    scp -o StrictHostKeyChecking=no -r build/* ubuntu@18.142.230.90:/var/www/html/ \
                 """
             }
         }
