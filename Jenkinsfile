@@ -14,7 +14,8 @@ node(null) {
             sshagent(credentials: ['ec2-ssh-agent-key']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@18.142.230.90 \
-                    'pwd'
+                    'pwd' \
+                    'ls'
                 """
             }
         }
