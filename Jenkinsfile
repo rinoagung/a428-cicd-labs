@@ -13,8 +13,8 @@ node(null) {
         stage('Deploy') {
             sshagent(credentials: ['ec2-ssh-agent-key']) {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@54.169.252.215
-                    pwd
+                    ssh -o StrictHostKeyChecking=no ubuntu@54.169.252.215 \
+                    'pwd'
                 """
             }
         }
