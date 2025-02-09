@@ -8,7 +8,7 @@ node(null) {
             sh './jenkins/scripts/test.sh'
         }
         stage('Manual Approval') {
-            input message: '23 Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
+            input message: '98 Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
         }
         stage('Deploy') {
             sshagent(credentials: ['ec2-ssh-agent-key']) {
