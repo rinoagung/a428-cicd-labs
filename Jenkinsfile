@@ -8,12 +8,12 @@ node(null) {
             sh './jenkins/scripts/test.sh'
         }
         stage('Manual Approval') {
-            input message: '98 Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
+            input message: '071 Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
         }
         stage('Deploy') {
             sshagent(credentials: ['ec2-ssh-agent-key']) {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@54.169.252.215 \
+                    ssh -o StrictHostKeyChecking=no ubuntu@18.142.230.90 \
                     'pwd'
                 """
             }
