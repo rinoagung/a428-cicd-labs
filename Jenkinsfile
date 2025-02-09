@@ -10,12 +10,17 @@ node(null) {
         stage('Manual Approval') {
             input message: '071 Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
         }
+        
+        stage('Deliver') {
+            steps {
+                sh './jenkins/scripts/deliver.sh'
+            }
+        }
         stage('Deploy') {
             sshagent(credentials: ['ec2-ssh-agent-key']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ubuntu@18.142.230.90 \
-                    scp -i StrictHostKeyChecking=no -r build/* ubuntu@18.142.230.90:/ \
-                    echo 'Deploy berhasil'
+                    'pwd'
                 """
             }
         }
