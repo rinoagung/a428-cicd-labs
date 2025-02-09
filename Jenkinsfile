@@ -18,7 +18,7 @@ node(null) {
         stage('Deploy') {
             sshagent(credentials: ['ec2-ssh-agent-key']) {
                 sh """
-                    scp -r build/ ubuntu@18.142.230.90:/ \
+                    scp -r build/ ubuntu@18.142.230.90:/home/ubuntu/ \
                 """
             }
         }
