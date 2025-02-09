@@ -9,9 +9,7 @@ node(null) {
         }
         
         stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
-            }
+            sh './jenkins/scripts/deliver.sh'
         }
         stage('Manual Approval') {
             input message: 'Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
