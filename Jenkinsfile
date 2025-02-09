@@ -1,5 +1,5 @@
 node {
-    docker.image('node:16-buster-slim').inside('-p 3000:3000') {
+        docker.image('cimg/node:16.20').inside('-p 3000:3000 -u root') {
         stage('Build') {
             sh 'npm cache clear --force'
             sh 'npm install'
@@ -8,26 +8,25 @@ node {
             sh './jenkins/scripts/test.sh'
         }
         stage('Manual Approval') {
-            input message: 'Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
+            input message: '23 Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
         }
         stage('Deploy') {
-            def ec2_ip = 'ec2-18-143-182-57.ap-southeast-1.compute.amazonaws.com'
-            def ec2_user = 'ubuntu'
-            def ec2_path = './test-environment.pem'
-
-            sh """
-                ls ./jenkins
-                ssh -i ${ec2_path} -o StrictHostKeyChecking=no -t ${ec2_user}@${ec2_ip} << EOF
-                mkdir -p /home/ubuntu/my-app && cd /home/ubuntu/my-app
-                git clone https://github.com/rinoagung/a428-cicd-labs.git || (cd a428-cicd-labs && git pull)
-                cd a428-cicd-labs
-                npm install
-                npm start
-                EOF
-            """
-            sh './jenkins/scripts/deliver.sh' 
-            sleep 60
-            sh './jenkins/scripts/kill.sh'
+            sshagent(credentials: ['ec2-ssh-agent-key']) {
+                sh """
+                    ssh -o StrictHostKeyChecking=no ubuntu@54.169.252.215
+                    pwd
+                """
+            }
         }
     }
 }
+
+// 2390a0e74caef5c2feb5ae123d2fb6fb5026a8e3a57bf878a8e81819a09c5628
+
+// scp -i /path/to/my-key.pem -r /path/to/build/ ec2-user@ec2-public-ip:/home/ec2-user/my-react-app
+
+
+// scp -i /path/to/my-key.pem -r build/ ec2-user@123.45.67.89:/home/ec2-user/my-react-app
+
+
+// instal nginx
