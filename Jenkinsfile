@@ -27,15 +27,14 @@ node(null) {
 
 def readEnvFromFile(envFilePath) {
     def envVars = []
-    def envFile = new File(envFilePath)
-    
-    if (envFile.exists()) {
-        envFile.eachLine { line ->
-            def keyValue = line.split('=', 2)
-            if (keyValue.length == 2) {
-                envVars.add("${keyValue[0]}=${keyValue[1]}")
-            }
+    def envOutput = sh(script: "cat ${envFilePath}", returnStdout: true).trim()
+
+    envOutput.split('\n').each { line ->
+        def keyValue = line.split('=', 2)
+        if (keyValue.length == 2) {
+            envVars.add("${keyValue[0]}=${keyValue[1]}")
         }
     }
     return envVars
 }
+
