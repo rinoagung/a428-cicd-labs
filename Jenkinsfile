@@ -12,19 +12,19 @@ node(null) {
         }
         
         stage('Deliver') {
-            // sh './jenkins/scripts/deliver.sh'
-            sh 'npm start'
+            sh './jenkins/scripts/deliver.sh'
+            // sh 'npm start'
         }
-        // stage('Manual Approval') {
-        //     input message: 'Ingin manjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
-        // }
+        stage('Manual Approval') {
+            input message: 'Ingin manjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
+        }
         
-        // stage('Deploy') {
-        //     sshagent(credentials: ['ec2-ssh-agent-key']) {
-        //         sh """
-        //             scp -o StrictHostKeyChecking=no -r build ${env.AWS_USER}@${env.AWS_IP}:/home/ubuntu/ \
-        //         """
-        //     }
-        // }
+        stage('Deploy') {
+            sshagent(credentials: ['ec2-ssh-agent-key']) {
+                sh """
+                    scp -o StrictHostKeyChecking=no -r build ${env.AWS_USER}@${env.AWS_IP}:/home/ubuntu/ \
+                """
+            }
+        }
     }
 }
