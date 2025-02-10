@@ -11,6 +11,7 @@ node(null) {
         stage('Deliver') {
             // sh './jenkins/scripts/deliver.sh'
             sh 'ls -la'
+            sh 'cd src && cat App.js'
         }
         // stage('Manual Approval') {
         //     input message: 'Ingin manjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
