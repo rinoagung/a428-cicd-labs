@@ -1,36 +1,41 @@
 node(null) {
-    docker.image('cimg/node:16.20').inside('-p 3000:3000 -u root') {
-        stage('Build') {
-            sh 'npm cache clear --force'
-            sh 'npm install'
-        }
-        stage('Test') {
-            sh './jenkins/scripts/test.sh'
-        }
-        
-        stage('Deliver') {
-            sh './jenkins/scripts/deliver.sh'
-        }
-        stage('Manual Approval') {
-            input message: 'Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
-        }
-        
-        stage('Deploy') {
-            sshagent(credentials: ['ec2-ssh-agent-key']) {
-                sh """
-                    scp -o StrictHostKeyChecking=no -r build ubuntu@18.142.230.90:/home/ubuntu/ \
-                """
+    withEnv(readEnvFromFile('.env')) {
+        docker.image('cimg/node:16.20').inside('-p 3000:3000 -u root') {
+            stage('Build') {
+                sh 'npm cache clear --force'
+                sh 'npm install'
+            }
+            stage('Test') {
+                sh './jenkins/scripts/test.sh'
+            }
+            stage('Deliver') {
+                sh './jenkins/scripts/deliver.sh'
+            }
+            stage('Manual Approval') {
+                input message: 'Lanjutkan ke tahap Deploy? (Klik "Proceed" untuk melanjutkan)'
+            }
+            stage('Deploy') {
+                sshagent(credentials: ['ec2-ssh-agent-key']) {
+                    sh """
+                        scp -o StrictHostKeyChecking=no -r build ${env.AWS_USER}@${env.AWS_IP}:/home/ubuntu/
+                    """
+                }
             }
         }
     }
 }
 
-// 2390a0e74caef5c2feb5ae123d2fb6fb5026a8e3a57bf878a8e81819a09c5628
-
-// scp -i /path/to/my-key.pem -r /path/to/build/ ec2-user@ec2-public-ip:/home/ec2-user/my-react-app
-
-
-// scp -i /path/to/my-key.pem -r build/ ec2-user@123.45.67.89:/home/ec2-user/my-react-app
-
-
-// instal nginx
+def readEnvFromFile(envFilePath) {
+    def envVars = []
+    def envFile = new File(envFilePath)
+    
+    if (envFile.exists()) {
+        envFile.eachLine { line ->
+            def keyValue = line.split('=', 2)
+            if (keyValue.length == 2) {
+                envVars.add("${keyValue[0]}=${keyValue[1]}")
+            }
+        }
+    }
+    return envVars
+}
