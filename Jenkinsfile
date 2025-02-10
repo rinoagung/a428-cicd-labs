@@ -1,5 +1,5 @@
 node(null) {
-    withEnv(readEnvFromFile('.env')) {
+    withEnv(readEnvFromFile('./.env')) {
         docker.image('cimg/node:16.20').inside('-p 3000:3000 -u root') {
             stage('Build') {
                 sh 'npm cache clear --force'
