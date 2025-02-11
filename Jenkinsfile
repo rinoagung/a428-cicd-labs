@@ -24,6 +24,8 @@ node(null) {
                 sh """
                     scp -o StrictHostKeyChecking=no -r build ${env.AWS_USER}@${env.AWS_IP}:/home/ubuntu/ \
                 """
+                sleep 60
+                sh './jenkins/scripts/kill.sh'
             }
         }
     }
